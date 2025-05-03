@@ -200,6 +200,7 @@
     }
     .option input[type="range"] {
         margin-top: 0;
+        width: 100px;
     }
 
     .option .desc {
@@ -574,6 +575,25 @@
     #imagesContainer::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.5);
     }
+
+    .option[name="lineWidth"] {
+        min-width: 100px;
+        position: relative;
+        padding-bottom: 8px;
+    }
+
+    .option[name="lineWidth"] input[type="text"] {
+        margin: 8px auto;
+        z-index: 1;
+        position: relative;
+    }
+
+    .option[name="lineWidth"] .reset {
+        position: absolute;
+        margin: 0;
+        top: 40px;
+        right: 16px;
+    }
 </style>
 <body>
     <div id="colorPickerContainer">
@@ -582,7 +602,6 @@
     <div class="content">
         <div class="header">
             <div class="title">cleanEdge</div>
-            <div class="desc">a pixel art upscaling algorithm for clean rotations</div>
         </div>
         <div class="modeContainer">
             <div class="title">mode:</div>
@@ -640,12 +659,11 @@
                     <input type="text" class="display" value="1" oninput="if(parseFloat(this.value) >= 0) this.nextElementSibling.value = parseFloat(this.value)">
                     <input type="range" min="0" max="3" step="0.01" oninput="this.previousElementSibling.value = this.value">
                 </div> -->
-                <div class="option" name="lineWidth">
+                <div class="option lineWidth" name="lineWidth">
                     <div class="desc">line width</div>
-                    <div class="reset equal" title="reset to diagonal" onclick="lineWidthInput.value = lineWidthRange.value = 0.707"></div>
-                    <div class="reset" title="reset" onclick="lineWidthInput.value = lineWidthRange.value = 1"></div>
-                    <input id="lineWidthInput" type="text" class="display" value="1" oninput="if(parseFloat(this.value) >= 0) this.nextElementSibling.value = parseFloat(this.value)">
-                    <input id="lineWidthRange" type="range" min="0" max="2" step="0.01" oninput="this.previousElementSibling.value = this.value">
+                    <div class="reset equal" style="display: none;" title="reset to diagonal" onclick="lineWidthInput.value = 0.707; updateLineWidth(0.707);"></div>
+                    <input id="lineWidthInput" type="text" class="display" value="1" oninput="updateLineWidth(this.value)" style="margin: 8px auto;">
+                    <input id="lineWidthRange" type="range" min="0" max="2" step="0.01" style="display: none;" value="1">
                 </div>
             </div>
         </div>
@@ -1074,6 +1092,18 @@
         slope: document.querySelector('.option[name="slope"] input'),
     }
 
+    let lineWidthValue = 1;
+
+    function updateLineWidth(value) {
+        const parsedValue = parseFloat(value);
+        if (!isNaN(parsedValue)) {
+            lineWidthValue = Math.max(0, Math.min(2, parsedValue));
+            // Update the input if the value was clamped
+            if (lineWidthValue.toString() !== value) {
+                document.getElementById('lineWidthInput').value = lineWidthValue;
+            }
+        }
+    }
 
     const gl = canvas.getContext("webgl2", {antialias: false, preserveDrawingBuffer:true});
     // gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -1105,7 +1135,7 @@
 
             highestColor,
             similarThreshold: optionEls.similarThreshold && parseFloat(optionEls.similarThreshold.value) || 0,
-            lineWidth: optionEls.lineWidth && parseFloat(optionEls.lineWidth.value),
+            lineWidth: lineWidthValue,
             SLOPE: mode === 'rotate' || optionEls.slope && optionEls.slope.checked,
             enable: optionEls.enable && optionEls.enable.checked,
             scaling: mode === 'scale'
