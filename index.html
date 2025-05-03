@@ -586,7 +586,7 @@
         </div>
         <div class="modeContainer">
             <div class="title">mode:</div>
-            <div id="modeSwitch">
+            <div id="modeSwitch" class="right">
                 <div class="slider">
                     <div class="mode">rotation</div>
                     <div class="mode">scaling</div>
@@ -595,7 +595,7 @@
                 <div class="mode">scaling</div>
             </div>
         </div>
-        <div id="main" class="rotate">
+        <div id="main" class="scale">
             <div id="imagesContainer"></div>
             <div class="uploadContainer">
                 <div id="upload" class="button">upload images</div>
@@ -649,7 +649,7 @@
                 </div>
             </div>
         </div>
-        <div id="dnld" class="button" style="margin-top: 30px !important;">download rotated</div>
+        <div id="dnld" class="button" style="margin-top: 30px !important;">download scaled</div>
         <div id="downloadAll" class="button" style="display: none;">download all</div>
     </div>
 </body>
@@ -1015,7 +1015,7 @@
     let uploadInputEl = document.getElementById('uploadInput');
     let downloadEl = document.getElementById('dnld');
 
-    let mode = 'rotate';
+    let mode = 'scale';
     let modeSwitchEl = document.getElementById('modeSwitch');
     modeSwitchEl.addEventListener('click', (e) => {
         modeSwitchEl.classList.remove('right');
