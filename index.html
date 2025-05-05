@@ -1774,7 +1774,7 @@
             // Add to zip
             const fileName = images[index].fileName || `image${index}`;
             const fileNameWithoutExt = fileName.split('.').slice(0, -1).join('.') || fileName;
-            zip.file(`${fileNameWithoutExt}-${mode === 'rotate' ? 'rotated' : 'scaled'}.png`, blob);
+            zip.file(`${fileNameWithoutExt}.png`, blob);
 
             // Store processed image
             images[index].processed = dataUrl;
